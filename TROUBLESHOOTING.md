@@ -232,3 +232,43 @@
         ```
         Verifying the resulting SIF file on Explorer via `apptainer inspect --labels "${SIF}"` confirmed `org.label-schema.build-arch: amd64`, allowing execution without architectural faults.
 
+
+## Week 4: Troubleshooting Report: Nextflow Variant Calling Pipeline
+
+## Failure 1: Interrupted Run and Resuming from Cache
+* **Action:** Started execution on the smoke dataset using `nextflow run main.nf -profile docker` and interrupted the run halfway with `Ctrl-C` while `FASTP` and `BWA_MEM` were executing.
+* **Observed Output:** Nextflow printed `WARN: Killing running tasks (6)` and aborted.
+* **Rerun with `-resume`:** Ran `nextflow run main.nf -profile docker -resume`.
+* **Which tasks were `cached` and which ran again:**
+  - **Cached tasks (3 tasks):** `VALIDATE` (1 of 1, cached: 1) and `FASTP` (2 of 3, cached: 2).
+  - **Tasks that ran again (17 tasks):** 1 remaining task of `FASTP`, all 3 tasks of `FASTQC`, `BWA_MEM`, `MARKDUPLICATES`, `HAPLOTYPECALLER`, and the single tasks of `JOINT_GENOTYPE`, `FILTER`, `MULTIQC`, and `PUBLISH`.
+* **Fix & Resolution:** Adding the `-resume` flag causes Nextflow to read task provenance hashes in `.nextflow/` and bypass execution of tasks whose inputs and scripts have not changed.
+
+## Failure 2: Queue Channel vs. Value Channel Resource Starvation
+* **Action:** In `main.nf`, passed the reference FASTA as a queue channel: `BWA_MEM(FASTP.out.reads, channel.fromPath(params.ref), ref_index)`.
+* **Observed Output:**
+  - `FASTP` processed all 3 samples (3 of 3), but `BWA_MEM` only executed for 1 sample (`smoke_01`, 1 of 1).
+  - `MARKDUPLICATES` and `HAPLOTYPECALLER` also executed only for `smoke_01`.
+  - **What stopped the run:** Nothing stopped the run; Nextflow exited with success (exit 0) after 14 tasks because the queue channel was exhausted after one emission, silently dropping `smoke_02` and `smoke_03` from alignment and joint genotyping.
+* **Fix & Resolution:** Reverted the reference input to a value channel via `ref = file(params.ref)`. Value channels persist across emissions so every sample in `FASTP.out.reads` receives the reference files.
+
+## Failure 3: Bash Variable Escaping in Nextflow Script Blocks
+* **Action:** Removed the backslash from a bash command substitution `\$(...)` in `modules/filter.nf`, changing it to unescaped `raw_count=$(grep -v '^#' ${vcf} | wc -l)`.
+* **Observed Output:** Nextflow performed Groovy variable interpolation before writing `.command.sh`, swallowing `${vcf}` and leaving an unclosed parenthesis: `raw_count=cohort.raw.vcf.gzgrep -v '^#' smoke.fa | wc -l)`.
+* **Evidence from Work Directory (`work/42/33f64ca5152eb84ee4b323d77ee0d3`):**
+  - **`.command.sh`:**
+    ```bash
+    raw_count=cohort.raw.vcf.gzgrep -v '^#' smoke.fa | wc -l)
+    echo "Total raw variants: $raw_count"
+    ```
+  - **`.command.err`:**
+    ```text
+    .command.sh: line 4: syntax error near unexpected token `)'
+    ```
+  - **What running `bash .command.run` did:** Running `bash .command.run` re-executed the task inside the Docker container, re-indexed the VCF, and failed at `.command.sh: line 4` with exit status 2.
+* **Fix & Resolution:** Escaped all bash variable expansions with a backslash as `\$` (or moved multiline shell scripts into standalone executables under `bin/`).
+
+## Failure 4: HPC Walltime Limit on Slurm (Explorer)
+* **Action:** Set `time = '2m'` for `HAPLOTYPECALLER` in `nextflow.config` under the `explorer` profile before submitting `slurm/nextflow.sbatch`.
+* **Observed Output:** Nextflow reported process exit status 140 after Slurm killed the job due to time limit expiration (Nextflow traps `SIGUSR2` 30 seconds prior to expiration). `sacct` confirmed job State as `TIMEOUT` / `CANCELLED` with an `Elapsed` time exceeding `Timelimit`.
+* **Fix & Resolution:** Restored the directive to `time = '1h'` in `nextflow.config` and re-submitted with `-resume`.
