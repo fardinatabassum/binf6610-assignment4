@@ -231,3 +231,4 @@
         docker build --platform linux/amd64 -t fardinatabassum/variant-call:latest .
         ```
         Verifying the resulting SIF file on Explorer via `apptainer inspect --labels "${SIF}"` confirmed `org.label-schema.build-arch: amd64`, allowing execution without architectural faults.
+

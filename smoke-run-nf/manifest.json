@@ -1,0 +1,45 @@
+{
+  "pipeline": {
+    "name": "variant-call",
+    "version": "1.0.0",
+    "implementation": "nextflow",
+    "revision": "none",
+    "git_sha": "none",
+    "run_id": "loquacious_boyd",
+    "started_at": "2026-10-08T15:48:43.736328-04:00",
+    "launch_dir": "/Users/fardinatabassum/binf6610/assignment4",
+    "finished_at": "2026-10-08T19:48:50Z",
+    "exit_status": "success"
+  },
+  "params": {
+    "samplesheet": "/Users/fardinatabassum/smoke/samplesheet.csv",
+    "ref": "/Users/fardinatabassum/smoke/smoke.fa",
+    "region": "smoke_1mb",
+    "outdir": "results",
+    "platform": "docker-local"
+  },
+  "platform": {
+    "kind": "docker-local",
+    "executor": "local",
+    "engine": "nextflow 26.04.6",
+    "containers": {
+      "tools": "community.wave.seqera.io/library/coreutils_gawk_gzip:7c58ccc2f9ca6bcc",
+      "fastqc": "quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0",
+      "fastp": "community.wave.seqera.io/library/fastp:1.3.7--075357a9d5c82494",
+      "bwa": "community.wave.seqera.io/library/bwa_samtools:22527ddb3cc80fb3",
+      "gatk": "community.wave.seqera.io/library/gatk4_samtools_bcftools:1adede7d418fb46b",
+      "multiqc": "quay.io/biocontainers/multiqc:1.35--pyhdfd78af_2"
+    }
+  },
+  "samples": [
+    {"sample_id": "smoke_01", "library_type": "paired", "condition": "unaffected"},
+    {"sample_id": "smoke_02", "library_type": "paired", "condition": "affected"},
+    {"sample_id": "smoke_03", "library_type": "single", "condition": "affected"}
+  ],
+  "outputs": [
+    {"path": "cohort.filtered.vcf.gz", "checksum": "sha256:340f7fcee68ee34310cdaff7d7022465b20a0ec4013f9b59063b8e7c3347fbe7"},
+    {"path": "multiqc_report.html", "checksum": "sha256:1da1d5fd77c3c12cb7f2af5c954e1c8d6c262a4bb24aa331b4348a14fc24d4f6"},
+    {"path": "samples.tsv", "checksum": "sha256:d534edf8132cce4c541af0eea6cc345b17613e1b4a7a5286742aa8d16395257c"},
+    {"path": "variants.tsv", "checksum": "sha256:9f37c83cddf2fff6cea6d6319a70ccd225c3dc3f8b7160d8dc9b47dcaf1e5113"}
+  ]
+}

@@ -32,3 +32,8 @@ slurm/logs/
 !smoke-run/cohort.filtered.vcf.gz
 !cluster-run/cohort.filtered.vcf.gz
 
+work/
+.nextflow/
+.nextflow.log*
+results/
+nf-head-*.out
