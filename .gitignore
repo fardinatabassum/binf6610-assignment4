@@ -1,0 +1,34 @@
+# macOS system files
+.DS_Store
+._*
+
+# Pipeline run outputs and work directories
+results/
+smoke-out/
+smoke/
+
+# Slurm logs
+slurm/logs/
+*.out
+*.err
+
+# Large sequencing, alignment, and intermediate files
+*.bam
+*.bai
+*.fastq.gz
+*.fq.gz
+*.fa
+*.fa.gz
+*.fasta
+*.fasta.gz
+*.fai
+*.dict
+*.vcf.gz
+*.vcf.gz.tbi
+*.g.vcf.gz
+*.g.vcf.gz.tbi
+
+# Whitelist 
+!smoke-run/cohort.filtered.vcf.gz
+!cluster-run/cohort.filtered.vcf.gz
+
