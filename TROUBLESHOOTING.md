@@ -269,6 +269,12 @@
 * **Fix & Resolution:** Escaped all bash variable expansions with a backslash as `\$` (or moved multiline shell scripts into standalone executables under `bin/`).
 
 ## Failure 4: HPC Walltime Limit on Slurm (Explorer)
-* **Action:** Set `time = '2m'` for `HAPLOTYPECALLER` in `nextflow.config` under the `explorer` profile before submitting `slurm/nextflow.sbatch`.
-* **Observed Output:** Nextflow reported process exit status 140 after Slurm killed the job due to time limit expiration (Nextflow traps `SIGUSR2` 30 seconds prior to expiration). `sacct` confirmed job State as `TIMEOUT` / `CANCELLED` with an `Elapsed` time exceeding `Timelimit`.
-* **Fix & Resolution:** Restored the directive to `time = '1h'` in `nextflow.config` and re-submitted with `-resume`.
+- **Action:** Set `time = '2m'` for `HAPLOTYPECALLER` in `nextflow.config` under the `explorer` profile before submitting `slurm/nextflow.sbatch`.
+- **Observed Output:** Nextflow reported process exit status `140` after Slurm killed the job due to time limit expiration (Nextflow traps `SIGUSR2` 30 seconds prior to expiration). `sacct` confirmed job State as `TIMEOUT` / `CANCELLED` with an `Elapsed` time exceeding `Timelimit` (ExitCode `0:15` indicating `SIGTERM`).
+- **Fix & Resolution:** Restored the directive to `time = '1h'` in `nextflow.config` and resubmitted with `-resume`. Nextflow recognized previously completed upstream processes (`FASTQC`, `FASTP`, `BWA_MEM`, `MARKDUPLICATES`) from the cache and resumed directly at `HAPLOTYPECALLER` through to downstream joint genotyping and filtering without recomputing prior steps.
+
+## Additional Note: Apptainer Image Build Memory Limit on Login Node
+- **Action:** Executed Nextflow pipeline run and image pulling on the Explorer login node without pre-cached SIF images.
+- **Observed Output:** Container conversion failed during SIF generation for large multi-tool images (`gatk4_samtools_bcftools` and `multiqc`) with error:
+  ```text
+  FATAL:   While making image from oci registry: ... failed to create SIF: ... mksquashfs: killed
