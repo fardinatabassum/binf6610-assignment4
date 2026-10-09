@@ -40,6 +40,8 @@ nf-head-*.out
 !smoke.fa.fai
 !smoke.dict
 !smoke-run/cohort.filtered.vcf.gz
+!smoke-run-nf/cohort.filtered.vcf.gz
+!smoke-run-nf/cohort.filtered.vcf.gz.tbi
 !cluster-run/cohort.filtered.vcf.gz
 !cluster-run-nf/cohort.filtered.vcf.gz
 !cluster-run-nf/cohort.filtered.vcf.gz.tbi
