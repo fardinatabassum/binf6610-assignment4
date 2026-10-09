@@ -236,45 +236,99 @@
 ## Week 4: Troubleshooting Report: Nextflow Variant Calling Pipeline
 
 ## Failure 1: Interrupted Run and Resuming from Cache
-* **Action:** Started execution on the smoke dataset using `nextflow run main.nf -profile docker` and interrupted the run halfway with `Ctrl-C` while `FASTP` and `BWA_MEM` were executing.
-* **Observed Output:** Nextflow printed `WARN: Killing running tasks (6)` and aborted.
-* **Rerun with `-resume`:** Ran `nextflow run main.nf -profile docker -resume`.
-* **Which tasks were `cached` and which ran again:**
-  - **Cached tasks (3 tasks):** `VALIDATE` (1 of 1, cached: 1) and `FASTP` (2 of 3, cached: 2).
-  - **Tasks that ran again (17 tasks):** 1 remaining task of `FASTP`, all 3 tasks of `FASTQC`, `BWA_MEM`, `MARKDUPLICATES`, `HAPLOTYPECALLER`, and the single tasks of `JOINT_GENOTYPE`, `FILTER`, `MULTIQC`, and `PUBLISH`.
-* **Fix & Resolution:** Adding the `-resume` flag causes Nextflow to read task provenance hashes in `.nextflow/` and bypass execution of tasks whose inputs and scripts have not changed.
+- ### Error Diagnostics
+    - **Command:** `nextflow run main.nf -profile docker`
+    - **Interruption Signal:** `SIGINT` (`Ctrl-C`)
+    - **Nextflow Status:** `WARN: Killing running tasks (6)`
+    - **Affected Tasks:** `FASTP` (1 task killed), `BWA_MEM` (all tasks terminated)
+    - **Exit State:** `ABORTED`
+
+- ### Cause
+    Manual interruption with `Ctrl-C` aborted execution while tasks were in-flight. Tasks that had not completed their execution were left in an incomplete state and did not produce cache metadata.
+
+- ### Fix
+    Re-executed the pipeline using the `-resume` flag:
+    ```bash
+    nextflow run main.nf -profile docker -resume
+    ```
 
 ## Failure 2: Queue Channel vs. Value Channel Resource Starvation
-* **Action:** In `main.nf`, passed the reference FASTA as a queue channel: `BWA_MEM(FASTP.out.reads, channel.fromPath(params.ref), ref_index)`.
-* **Observed Output:**
-  - `FASTP` processed all 3 samples (3 of 3), but `BWA_MEM` only executed for 1 sample (`smoke_01`, 1 of 1).
-  - `MARKDUPLICATES` and `HAPLOTYPECALLER` also executed only for `smoke_01`.
-  - **What stopped the run:** Nothing stopped the run; Nextflow exited with success (exit 0) after 14 tasks because the queue channel was exhausted after one emission, silently dropping `smoke_02` and `smoke_03` from alignment and joint genotyping.
-* **Fix & Resolution:** Reverted the reference input to a value channel via `ref = file(params.ref)`. Value channels persist across emissions so every sample in `FASTP.out.reads` receives the reference files.
+- ### Error Diagnostics
+    - **Process Affected:** `BWA_MEM`, `MARKDUPLICATES`, `HAPLOTYPECALLER`
+    - **Input Channel Configuration:** `channel.fromPath(params.ref)`
+    - **Samples Submitted:** 3 (`smoke_01`, `smoke_02`, `smoke_03`)
+    - **Samples Processed:** 1 (`smoke_01`)
+    - **Nextflow Exit Code:** `0` (False Success)
+
+- ### Cause
+    In `main.nf`, the reference FASTA was passed into `BWA_MEM` as a queue channel created via `channel.fromPath()`. Queue channels are consumable meaning that once it was emitted for `smoke_01`, the channel was exhausted. The workflow completed with exit code 0 after only 14 tasks because `smoke_02` and `smoke_03` were starved of the consumed reference channel and omitted wihtout warning.
+
+- ### Fix
+    Converted the reference genome input to a value channel using the `file()` factory:
+    ```groovy
+    ref = file(params.ref)
+    ```
+    Value channels can be read repeatedly across emissions, ensuring every sample emitted by `FASTP.out.reads` receives the reference files.
+
 
 ## Failure 3: Bash Variable Escaping in Nextflow Script Blocks
-* **Action:** Removed the backslash from a bash command substitution `\$(...)` in `modules/filter.nf`, changing it to unescaped `raw_count=$(grep -v '^#' ${vcf} | wc -l)`.
-* **Observed Output:** Nextflow performed Groovy variable interpolation before writing `.command.sh`, swallowing `${vcf}` and leaving an unclosed parenthesis: `raw_count=cohort.raw.vcf.gzgrep -v '^#' smoke.fa | wc -l)`.
-* **Evidence from Work Directory (`work/42/33f64ca5152eb84ee4b323d77ee0d3`):**
-  - **`.command.sh`:**
+
+- ### Error Diagnostics
+    - **Module:** `modules/filter.nf`
+    - **Work Directory:** `work/42/33f64ca5152eb84ee4b323d77ee0d3`
+    - **Process Exit Code:** `2`
+    - **Error in `.command.err`:** `.command.sh: line 4: syntax error near unexpected token ')'`
+    - **Corrupted Command in `.command.sh`:** `raw_count=cohort.raw.vcf.gzgrep -v '^#' smoke.fa | wc -l)`
+
+- ### Cause
+    The command substitution was written unescaped as `raw_count=$(grep -v '^#' ${vcf} | wc -l)`. Nextflow performed Groovy string interpolation prior to generating `.command.sh`, interpreting `$(` as a Groovy variable reference, swallowing `${vcf}`, and rendering broken Bash syntax.
+
+- ### Fix
+    Escaped all Bash variable expressions using a backslash:
     ```bash
-    raw_count=cohort.raw.vcf.gzgrep -v '^#' smoke.fa | wc -l)
-    echo "Total raw variants: $raw_count"
+    raw_count=\$(grep -v '^#' ${vcf} | wc -l)
     ```
-  - **`.command.err`:**
-    ```text
-    .command.sh: line 4: syntax error near unexpected token `)'
-    ```
-  - **What running `bash .command.run` did:** Running `bash .command.run` re-executed the task inside the Docker container, re-indexed the VCF, and failed at `.command.sh: line 4` with exit status 2.
-* **Fix & Resolution:** Escaped all bash variable expansions with a backslash as `\$` (or moved multiline shell scripts into standalone executables under `bin/`).
+    This forces Nextflow to emit the literal `$()` syntax directly into `.command.sh` for Bash execution inside the container.
+
 
 ## Failure 4: HPC Walltime Limit on Slurm (Explorer)
-- **Action:** Set `time = '2m'` for `HAPLOTYPECALLER` in `nextflow.config` under the `explorer` profile before submitting `slurm/nextflow.sbatch`.
-- **Observed Output:** Nextflow reported process exit status `140` after Slurm killed the job due to time limit expiration (Nextflow traps `SIGUSR2` 30 seconds prior to expiration). `sacct` confirmed job State as `TIMEOUT` / `CANCELLED` with an `Elapsed` time exceeding `Timelimit` (ExitCode `0:15` indicating `SIGTERM`).
-- **Fix & Resolution:** Restored the directive to `time = '1h'` in `nextflow.config` and resubmitted with `-resume`. Nextflow recognized previously completed upstream processes (`FASTQC`, `FASTP`, `BWA_MEM`, `MARKDUPLICATES`) from the cache and resumed directly at `HAPLOTYPECALLER` through to downstream joint genotyping and filtering without recomputing prior steps.
 
-## Additional Note: Apptainer Image Build Memory Limit on Login Node
-- **Action:** Executed Nextflow pipeline run and image pulling on the Explorer login node without pre-cached SIF images.
-- **Observed Output:** Container conversion failed during SIF generation for large multi-tool images (`gatk4_samtools_bcftools` and `multiqc`) with error:
-  ```text
-  FATAL:   While making image from oci registry: ... failed to create SIF: ... mksquashfs: killed
+- ### Error Diagnostics
+    - **Partition:** `courses`
+    - **Slurm State:** `TIMEOUT` / `CANCELLED`
+    - **Nextflow Process Exit Code:** `140`
+    - **Slurm Exit Code:** `0:15` (`SIGTERM`)
+    - **Allocated Walltime:** `00:02:00`
+    - **Elapsed Time:** `00:02:05`
+
+- ### Cause
+    `nextflow.config` under the `explorer` profile was deliberately set to `time = '2m'` for `HAPLOTYPECALLER`. Chromosome 20 active-region traversal requires 5–8 minutes per sample. When the 2-minute wallclock limit elapsed, Slurm sent `SIGTERM` followed by `SIGKILL`, terminating the process and causing Nextflow to fail with exit code `140`.
+
+- ### Fix
+    Restored the allocation to 1 hour in `nextflow.config`:
+    ```groovy
+    withName: 'HAPLOTYPECALLER' {
+        time = '1h'
+    }
+    ```
+    Resubmitted via `sbatch slurm/nextflow.sbatch -resume`. Nextflow recovered cached results for upstream steps (`FASTQC`, `FASTP`, `BWA_MEM`, `MARKDUPLICATES`) and completed variant calling.
+
+
+## Additional Failure: Apptainer Image Build Memory Limit on Login Node
+
+- ### Error Diagnostics
+    - **Host:** Explorer Login Node (`explorer-01`)
+    - **Tool:** Apptainer / `mksquashfs`
+    - **Error Output:** `FATAL: While making image from oci registry: ... failed to create SIF: ... mksquashfs: killed`
+    - **Exit State:** `OOM Killed`
+
+- ### Cause
+    When Nextflow attempted to automatically pull and construct SIF container images from Docker registries on the login node, the compression step (`mksquashfs`) for large multi-tool images (`gatk4_samtools_bcftools` and `multiqc`) exceeded the login node's per-user memory limit.
+
+- ### Fix
+    Acquired an interactive compute allocation with 8 GB of RAM and pre-pulled all images directly into the cache directory:
+    ```bash
+    srun --partition=courses --account=binf6610.202710 --cpus-per-task=2 --mem=8G --time=00:15:00 \
+    apptainer pull /scratch/$USER/nxf-apptainer/gatk4_samtools_bcftools.img docker://quay.io/biocontainers/gatk4:4.5.0.0--py36hdfd78af_0
+    ```
+    With the `.img` files pre-staged in `/scratch/$USER/nxf-apptainer/`, Nextflow detected existing images and bypassed runtime conversions entirely.
