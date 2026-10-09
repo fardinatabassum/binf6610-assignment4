@@ -1,0 +1,46 @@
+task_id	name	status	exit	container	native_id	realtime	%cpu	peak_rss
+1	VALIDATE	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-coreutils_gawk_gzip-7c58ccc2f9ca6bcc.img	10927641	134ms	38.4%	6.6 MB
+6	FASTQC (NA12891)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927860	32s	81.7%	575.2 MB
+7	FASTQC (NA12892)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927867	1m 8s	19.9%	450.8 MB
+4	FASTP (NA12891)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927865	54.6s	40.9%	1.1 GB
+2	FASTP (NA12878)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927862	55.3s	38.8%	1.1 GB
+3	FASTQC (NA12878)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927861	1m 14s	32.5%	600 MB
+8	FASTQC (NA07357)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927869	34s	92.9%	547 MB
+11	FASTP (NA07357)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927868	22.1s	94.5%	1.1 GB
+9	FASTQC (NA12003)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927871	20s	90.5%	478.6 MB
+5	FASTP (NA12892)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927870	35.9s	97.3%	1.3 GB
+14	FASTQC (NA10851)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927872	35s	92.5%	592.8 MB
+13	FASTP (NA12003)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927875	32.1s	97.1%	1.3 GB
+15	FASTQC (NA12813)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927874	49s	94.2%	611.3 MB
+17	FASTP (NA10851)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927873	26.3s	96.0%	1.1 GB
+18	FASTQC (NA12873)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-fastqc-0.12.1--hdfd78af_0.img	10927877	37s	87.2%	610.8 MB
+22	FASTP (NA12873)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927878	36.1s	82.7%	1.1 GB
+19	FASTP (NA12813)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-fastp-1.3.7--075357a9d5c82494.img	10927876	39.7s	95.4%	1.1 GB
+21	BWA_MEM (NA12003)	CACHED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10927896	55s	712.4%	6.5 GB
+27	MARKDUPLICATES (NA12003)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928721	18.5s	127.4%	3.6 GB
+25	MULTIQC	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/quay.io-biocontainers-multiqc-1.35--pyhdfd78af_2.img	10928707	34.4s	12.2%	201.4 MB
+10	BWA_MEM (NA12891)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928697	1m 40s	643.5%	6.8 GB
+20	BWA_MEM (NA12892)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928700	41.1s	714.9%	6.4 GB
+23	BWA_MEM (NA10851)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928701	1m 22s	754.8%	6.8 GB
+29	MARKDUPLICATES (NA12891)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928733	33.4s	125.0%	4 GB
+24	BWA_MEM (NA12873)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928724	1m 53s	755.4%	7.1 GB
+12	BWA_MEM (NA12878)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928698	2m 19s	496.1%	6.8 GB
+16	BWA_MEM (NA07357)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928699	2m 19s	494.6%	6.8 GB
+30	MARKDUPLICATES (NA12892)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928734	19.3s	134.4%	3.7 GB
+31	MARKDUPLICATES (NA10851)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928735	26.5s	140.4%	4 GB
+33	MARKDUPLICATES (NA12873)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928742	28.7s	151.1%	4.2 GB
+34	MARKDUPLICATES (NA12878)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928743	26.8s	136.2%	4 GB
+26	BWA_MEM (NA12813)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-bwa_samtools-22527ddb3cc80fb3.img	10928712	3m 1s	757.3%	7.5 GB
+35	MARKDUPLICATES (NA07357)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928744	22.1s	152.2%	3.9 GB
+40	MARKDUPLICATES (NA12813)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928760	36.3s	135.3%	4.6 GB
+28	HAPLOTYPECALLER (NA12003)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928727	3m 32s	212.3%	1.5 GB
+36	HAPLOTYPECALLER (NA12892)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928745	3m 26s	217.9%	1.6 GB
+32	HAPLOTYPECALLER (NA12891)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928739	5m 5s	197.7%	1.2 GB
+39	HAPLOTYPECALLER (NA12878)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928756	4m 46s	204.2%	1.1 GB
+41	HAPLOTYPECALLER (NA07357)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928771	4m 37s	202.1%	1.2 GB
+37	HAPLOTYPECALLER (NA10851)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928746	5m 34s	173.9%	1.3 GB
+38	HAPLOTYPECALLER (NA12873)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928753	6m 43s	171.1%	1.1 GB
+42	HAPLOTYPECALLER (NA12813)	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928776	6m 49s	188.4%	1 GB
+43	JOINT_GENOTYPE	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928855	8m 4s	103.4%	1.1 GB
+44	FILTER	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-gatk4_samtools_bcftools-1adede7d418fb46b.img	10928941	12s	120.3%	551.3 MB
+45	PUBLISH	COMPLETED	0	/scratch/tabassum.f/nxf-apptainer/community.wave.seqera.io-library-coreutils_gawk_gzip-7c58ccc2f9ca6bcc.img	10928944	11.1s	1.1%	7.1 MB
