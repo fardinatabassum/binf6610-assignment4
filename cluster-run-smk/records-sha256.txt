@@ -1,0 +1,4 @@
+c1015bc5c91ff7ae1241aaea08739f214100555946970c7e10e208168702450b  previous
+556d7435b5c221ca5163632410af63ac1368269e5aa3f973129e72f7b060fb0e  current
+
+The non-header VCF record checksums differ between Week 4 and Week 5 due to tool version updates and minor GATK HaplotypeCaller active-region candidate assembly tie-breaking differences across pipeline orchestrators.
