@@ -19,6 +19,14 @@ work/
 results/
 nf-head-*.out
 
+# Snakemake runtime files and execution cache
+.snakemake/
+work/
+logs/
+results/
+slurm/*.out
+
+
 # Large sequencing, alignment, and intermediate files
 *.bam
 *.bai
@@ -39,6 +47,7 @@ nf-head-*.out
 !smoke.fa
 !smoke.fa.fai
 !smoke.dict
+
 !smoke-run/cohort.filtered.vcf.gz
 !smoke-run-nf/cohort.filtered.vcf.gz
 !smoke-run-nf/cohort.filtered.vcf.gz.tbi
@@ -48,8 +57,7 @@ nf-head-*.out
 !cluster-run-container/cohort.filtered.vcf.gz
 !cluster-run-container/cohort.filtered.vcf.gz.tbi
 
-.snakemake/
-work/
-logs/
-results/
-slurm/*.out
+!smoke-run-smk/**
+!cluster-run-smk/**
+!cluster-run-smk/*.out
+
