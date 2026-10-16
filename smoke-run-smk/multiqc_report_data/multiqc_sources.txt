@@ -1,0 +1,12 @@
+Module	Section	Sample Name	Source
+Picard	DuplicationMetrics	smoke_01	/Users/fardinatabassum/binf6610/assignment4/work/markduplicates/smoke_01.dupmetrics.txt
+Picard	DuplicationMetrics	smoke_02	/Users/fardinatabassum/binf6610/assignment4/work/markduplicates/smoke_02.dupmetrics.txt
+Picard	DuplicationMetrics	smoke_03	/Users/fardinatabassum/binf6610/assignment4/work/markduplicates/smoke_03.dupmetrics.txt
+fastp	all_sections	smoke_01	/Users/fardinatabassum/binf6610/assignment4/work/trim/smoke_01.fastp.json
+fastp	all_sections	smoke_02	/Users/fardinatabassum/binf6610/assignment4/work/trim/smoke_02.fastp.json
+fastp	all_sections	smoke_03_R1	/Users/fardinatabassum/binf6610/assignment4/work/trim/smoke_03.fastp.json
+FastQC	all_sections	smoke_01_R1	/Users/fardinatabassum/binf6610/assignment4/work/fastqc/smoke_01/smoke_01_R1_fastqc.zip
+FastQC	all_sections	smoke_01_R2	/Users/fardinatabassum/binf6610/assignment4/work/fastqc/smoke_01/smoke_01_R2_fastqc.zip
+FastQC	all_sections	smoke_02_R1	/Users/fardinatabassum/binf6610/assignment4/work/fastqc/smoke_02/smoke_02_R1_fastqc.zip
+FastQC	all_sections	smoke_02_R2	/Users/fardinatabassum/binf6610/assignment4/work/fastqc/smoke_02/smoke_02_R2_fastqc.zip
+FastQC	all_sections	smoke_03_R1	/Users/fardinatabassum/binf6610/assignment4/work/fastqc/smoke_03/smoke_03_R1_fastqc.zip

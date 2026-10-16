@@ -1,0 +1,4 @@
+Sample	Passed Filter	Low Quality	Too Many N	Low Complexity	Too Short	Too Long
+smoke_01	200000.0	0.0	0.0	nan	0.0	0.0
+smoke_02	200000.0	0.0	0.0	nan	0.0	0.0
+smoke_03_R1	60000.0	0.0	0.0	nan	0.0	0.0

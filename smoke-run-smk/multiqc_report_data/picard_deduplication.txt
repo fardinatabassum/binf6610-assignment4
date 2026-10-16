@@ -1,0 +1,4 @@
+Sample	Unique Pairs	Unique Unpaired	Duplicate Pairs Optical	Duplicate Pairs Nonoptical	Duplicate Unpaired
+smoke_01	199926.0	0.0	36.0	38.0	0.0
+smoke_02	199956.0	0.0	20.0	24.0	0.0
+smoke_03	0.0	59132.0	0.0	0.0	868.0

@@ -48,3 +48,8 @@ nf-head-*.out
 !cluster-run-container/cohort.filtered.vcf.gz
 !cluster-run-container/cohort.filtered.vcf.gz.tbi
 
+.snakemake/
+work/
+logs/
+results/
+slurm/*.out

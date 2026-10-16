@@ -332,3 +332,22 @@
     apptainer pull /scratch/$USER/nxf-apptainer/gatk4_samtools_bcftools.img docker://quay.io/biocontainers/gatk4:4.5.0.0--py36hdfd78af_0
     ```
     With the `.img` files pre-staged in `/scratch/$USER/nxf-apptainer/`, Nextflow detected existing images and bypassed runtime conversions entirely.
+
+
+## Week 5: Troubleshooting Report: Snakemake Pipeline
+
+## Failure 1: Interrupted execution and metadata locking (Ctrl-C)
+* **Error:** When a user terminates Snakemake prematurely (using `Ctrl-C` or SIGINT during execution), the process aborts with `Terminating processes` and leaves target directories locked. Subsequent runs fail with `IncompleteFiles` or directory locks.
+* **Fix:** Avoid deleting output folders manually. First verify no background subshells are running, then release the filesystem lock by running `snakemake --unlock`. To clean up incomplete outputs left behind by the terminated jobs, execute the pipeline with the `--rerun-incomplete` flag.
+
+## Failure 2: Identifying rule errors using the log
+* **Error:** When a task fails, Snakemake raises a `RuleException` indicating that a rule failed with a non-zero exit status, while jobs with the same wildcards cannot proceed.
+* **Fix:** Snakemake isolates stderr/stdout by redirecting execution output into per-job log files defined in the rule directive via `log: "logs/<rule>/<sample>.log"` and `(...) 2> {log}`. Rather than reading the general Snakemake console output, inspect the specific per-task log (for example, `cat logs/validate.log` or `cat logs/bwa_mem/smoke_02.log`) to immediately find tool-specific errors.
+
+## Failure 3: Ambiguous rule matching and wildcard_constraints
+* **Error** When multiple rules (such as `fastp_paired` and `fastp_single`) define overlapping output patterns like `work/trim/{sample}_R1.trim.fastq.gz`, Snakemake raises an `AmbiguousRuleException` because wildcard resolution is ambiguous.
+* **Fix:** Resolve the ambiguity by defining `wildcard_constraints` on the `{sample}` wildcard in each rule using regular expressions. In our pipeline, we pre-parse the samplesheet to categorize samples into paired and single sets, then apply `wildcard_constraints: sample=one_of(PAIRED)` and `wildcard_constraints: sample=one_of(SINGLE)` so each sample matches only its corresponding rule.
+
+## Failure 4: Missing container and environments with no Apptainer
+* **Error:** If a pipeline that relies on containerized tools is run in an environment where Apptainer/Singularity is unavailable or not configured, Snakemake executes commands natively on the host shell. If the host lacks local tool installations, the shell returns exit code 127 with `command not found`.
+* **Fix:** Snakemake handles this using execution profiles. On laptops lacking container environments, the profile (`profiles/laptop/profile.yaml`) omits the Apptainer directive and runs natively where tools are available in the local environment. On the HPC cluster, the profile (`profiles/explorer/profile.yaml`) explicitly specifies `software-deployment-method: apptainer`, configures container caching, and sets filesystem bind paths (`--bind /courses,/scratch`) to resolve all dependencies cleanly inside containers.

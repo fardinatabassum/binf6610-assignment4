@@ -14,14 +14,27 @@ if [[ ! -f "$ref" ]]; then
     exit 1
 fi
 
+sheet_dir=$(dirname "$sheet")
+
 awk -F',' 'NR>1 {
     gsub(/\r/, "")
-    if ($5 != "") print $5
-    if ($6 != "") print $6
+    # Column 5 is r1_fastq, Column 6 is r2_fastq
+    if (NF >= 5 && $5 != "") print $5
+    if (NF >= 6 && $6 != "") print $6
 }' "$sheet" | while read -r r; do
-    base=$(basename "$r" | tr -d '"' | xargs)
-    if [[ -n "$base" && ! -f "$base" ]]; then
-        echo "FASTQ file missing: $base" >&2
+    # Strip quotes or spaces
+    cleaned=$(echo "$r" | tr -d '"' | xargs)
+    [[ -z "$cleaned" ]] && continue
+
+    # Resolve relative paths relative to the samplesheet's folder
+    if [[ "$cleaned" = /* ]]; then
+        target="$cleaned"
+    else
+        target="$sheet_dir/$cleaned"
+    fi
+
+    if [[ ! -f "$target" ]]; then
+        echo "FASTQ file missing: $target" >&2
         exit 1
     fi
 done

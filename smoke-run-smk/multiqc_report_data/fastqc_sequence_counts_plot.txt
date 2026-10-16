@@ -1,0 +1,6 @@
+Sample	Unique Reads	Duplicate Reads
+smoke_01_R1	97898.0	2102.0
+smoke_01_R2	97925.0	2075.0
+smoke_02_R1	97975.0	2025.0
+smoke_02_R2	97915.0	2085.0
+smoke_03_R1	59269.0	731.0
