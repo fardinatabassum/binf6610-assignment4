@@ -11,3 +11,5 @@ bwa=0.7.17 samtools=1.20 bcftools=1.20 gatk=4.5.0.0 fastqc=0.12.1 fastp=0.23.4 t
 docker.io/fardinatabassum/variant-call@sha256:3ee02d026e15eaccadad9d182f2189e1e4e574e03d7bb81f6732e68c92301074
 
 Rerunning this pipeline in a year requires the cryptographic digest listed under The pushed image, which locks down the exact container environment so upstream package updates won't break reproducibility.
+## The image in ECR
+<account>.dkr.ecr.us-east-2.amazonaws.com/variant-call@sha256:fb1b832c9750d42bec8f80420b81217c4612d8963d0e5e4a707263fb7fdd3d24

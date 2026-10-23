@@ -61,3 +61,14 @@ slurm/*.out
 !cluster-run-smk/**
 !cluster-run-smk/*.out
 
+
+# Nextflow runtime & logs
+nextflow
+.nextflow/
+.nextflow.log*
+.nextflow-console.log
+.nextflow.pid
+
+# macOS metadata
+.DS_Store
+._*
