@@ -39,7 +39,7 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
             -v "$PWD":/repo -w /repo/tests/smoke \
-            -e REF=/repo/tests/smoke/smoke.fa -e REGION=smoke_1mb -e THREADS=4 \
+            -e FASTQ_ROOT=/repo/tests/smoke -e REF=/repo/tests/smoke/smoke.fa -e REGION=smoke_1mb -e THREADS=4 \
             variant-call:ci bash /repo/run_pipeline.sh samplesheet.csv /repo/ci-out
 
       - name: Check the manifest against the course's contract
