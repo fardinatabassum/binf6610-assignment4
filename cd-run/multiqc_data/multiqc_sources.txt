@@ -1,0 +1,12 @@
+Module	Section	Sample Name	Source
+Picard	DuplicationMetrics	smoke_01	/tmp/run.cMz2E7/out/logs/smoke_01.metrics.txt
+Picard	DuplicationMetrics	smoke_02	/tmp/run.cMz2E7/out/logs/smoke_02.metrics.txt
+Picard	DuplicationMetrics	smoke_03	/tmp/run.cMz2E7/out/logs/smoke_03.metrics.txt
+fastp	all_sections	smoke_01	/tmp/run.cMz2E7/out/logs/smoke_01.fastp.json
+fastp	all_sections	smoke_02	/tmp/run.cMz2E7/out/logs/smoke_02.fastp.json
+fastp	all_sections	smoke_03_R1	/tmp/run.cMz2E7/out/logs/smoke_03.fastp.json
+FastQC	all_sections	smoke_01_R1	/tmp/run.cMz2E7/out/qc_raw/smoke_01_R1_fastqc.zip
+FastQC	all_sections	smoke_01_R2	/tmp/run.cMz2E7/out/qc_raw/smoke_01_R2_fastqc.zip
+FastQC	all_sections	smoke_02_R1	/tmp/run.cMz2E7/out/qc_raw/smoke_02_R1_fastqc.zip
+FastQC	all_sections	smoke_02_R2	/tmp/run.cMz2E7/out/qc_raw/smoke_02_R2_fastqc.zip
+FastQC	all_sections	smoke_03_R1	/tmp/run.cMz2E7/out/qc_raw/smoke_03_R1_fastqc.zip

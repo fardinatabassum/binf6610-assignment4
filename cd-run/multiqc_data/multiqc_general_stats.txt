@@ -1,0 +1,9 @@
+Sample	picard_mark_duplicates-PERCENT_DUPLICATION	fastp-pct_duplication	fastp-after_filtering_q30_rate	fastp-after_filtering_q30_bases	fastp-filtering_result_passed_filter_reads	fastp-after_filtering_gc_content	fastp-pct_surviving_reads	fastp-pct_surviving_bases	fastp-pct_adapter	fastp-before_filtering_read1_mean_length	fastp-before_filtering_read2_mean_length	fastqc-percent_duplicates	fastqc-percent_gc	fastqc-avg_sequence_length	fastqc-median_sequence_length	fastqc-percent_fails	fastqc-total_sequences
+smoke_01	0.037	0.005	0.0	0.0	0.19999999999999998	40.6456	100.0	99.84883333333333	0.312	150.0	150.0						
+smoke_01_R1												2.102000000000004	40.0	150.0	150	10.0	0.09999999999999999
+smoke_01_R2												2.0759999999999934	40.0	150.0	150	10.0	0.09999999999999999
+smoke_02	0.022000000000000002	0.003	0.0	0.0	0.19999999999999998	40.6748	100.0	99.82878666666667	0.329	150.0	150.0						
+smoke_02_R1												2.0259999999999962	40.0	150.0	150	10.0	0.09999999999999999
+smoke_02_R2												2.0859999999999985	40.0	150.0	150	10.0	0.09999999999999999
+smoke_03	1.4467																
+smoke_03_R1		0.753333	0.0	0.0	0.06	40.6396	100.0	100.0		150.0		1.2183333333333337	40.0	150.0	150	10.0	0.06
