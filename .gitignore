@@ -72,3 +72,4 @@ nextflow
 # macOS metadata
 .DS_Store
 ._*
+*.db
